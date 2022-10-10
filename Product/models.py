@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-
 """
  ○ id (primary, integer)
  ○ name (required, string, unique)
@@ -33,4 +32,4 @@ class Product(models.Model):
     updated_at = models.DateField(blank=True, null=True, default=None)
 
     def __str__(self):
-        return "%s - %s" % (self.id, self.name)
+        return "%s - %s - $%s Rated: %s" % (self.id, self.name, self.price, self.rating)
