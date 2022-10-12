@@ -25,7 +25,7 @@ class Product(models.Model):
         max_digits=3,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
         decimal_places=2,
-        help_text="Rating - can go from 1 to 5.",
+        help_text="Product rating - can go from 1 to 5.",
         null=False,
         blank=False,
     )
@@ -33,3 +33,22 @@ class Product(models.Model):
 
     def __str__(self):
         return "%s - %s - $%s Rated: %s" % (self.id, self.name, self.price, self.rating)
+
+
+class ProductRatings(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, blank=True, null=True, unique=False
+    )
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, blank=False, null=False, unique=False
+    )
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        help_text="Rating - can go from 1 to 5.",
+        null=False,
+        blank=False,
+        unique=False,
+    )
+
+    def __str__(self):
+        return "%s %s %s" % (self.user, self.product.name, self.rating)
