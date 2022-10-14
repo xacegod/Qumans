@@ -23,9 +23,9 @@ class Product(models.Model):
     )
     rating = models.DecimalField(
         max_digits=3,
-        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        validators=[MinValueValidator(0), MaxValueValidator(5)],
         decimal_places=2,
-        help_text="Product rating - can go from 1 to 5.",
+        help_text="Product rating - can go from 0 to 5.",
         null=False,
         blank=False,
     )
@@ -42,9 +42,11 @@ class ProductRatings(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, blank=False, null=False, unique=False
     )
-    rating = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)],
-        help_text="Rating - can go from 1 to 5.",
+    rating = models.DecimalField(
+        validators=[MinValueValidator(0), MaxValueValidator(5)],
+        help_text="Rating - can go from 0 to 5.",
+        decimal_places=2,
+        max_digits=3,
         null=False,
         blank=False,
         unique=False,

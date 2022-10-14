@@ -17,7 +17,7 @@ class ProductRatingSerializer(serializers.ModelSerializer):
         model = ProductRatings
         fields = ["product", "rating", "user"]
 
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def create(self, validated_data):
         p = validated_data.get("product")
@@ -41,8 +41,4 @@ class ProductRatingSerializer(serializers.ModelSerializer):
             )
         )
         p.save()
-        return validated_data
-
-    def update(self, instance, validated_data):
-        print(instance, validated_data)
         return validated_data
