@@ -31,8 +31,9 @@ class ListProductAPIView(ListAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ["name", "id", "price", "updated_at", "rating"]
+    ordering_fields = ["name", "id", "price", "updated_at", "rating"]
 
 
 class CreateProductAPIView(CreateAPIView):
