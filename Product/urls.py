@@ -9,7 +9,7 @@ from Product.views import (
     UpdateProductAPIView,
     api_overview,
     get_product_with_id,
-    product_rating,
+    product_rating_view,
     product_rating_list,
 )
 
@@ -22,6 +22,6 @@ urlpatterns = [
     path("<int:pk>/", get_product_with_id, name="get_product_with_id"),
     path("rate/", ListRatingAPIView.as_view(), name="rating_list"),
     path("rate/create", CreateProductRatingAPIView.as_view(), name="create_rating"),
-    path("rate/<int:pk>/", product_rating, name="all_rating"),
+    path("rate/<int:pk>/", product_rating_view, name="all_rating"),
     path("rate/list/", product_rating_list, name="ratings_list"),
 ]

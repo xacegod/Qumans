@@ -89,7 +89,7 @@ def product_rating_list(request):
 
 
 @api_view(["GET", "PUT", "DELETE"])
-def product_rating(request, pk):
+def product_rating_view(request, pk):
     """
     Retrieve, update or delete a code product_rating.
     """
@@ -102,20 +102,20 @@ def product_rating(request, pk):
     except ProductRatings.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    product_rating_ = ProductRatings.objects.get(product=product, user=request.user)
+    product_rating = ProductRatings.objects.get(product=product, user=request.user)
     if request.method == "GET":
-        serializer = ProductRatingSerializer(product_rating_, many=False)
+        serializer = ProductRatingSerializer(product_rating, many=False)
         return Response(serializer.data)
 
     if request.method == "PUT":
-        if not product_rating_:
-            product_rating_ = ProductRatings.objects.create(
+        if not product_rating:
+            product_rating = ProductRatings.objects.create(
                 product=product, rating=request.get("rating"), user=request.user
             )
         else:
-            product_rating_.rating = request.data["rating"]
+            product_rating.rating = request.data["rating"]
 
-        product_rating_.save()
+        product_rating.save()
         product.rating = decimal.Decimal(
             round(
                 ProductRatings.objects.filter(product=product).aggregate(Avg("rating"))[
@@ -127,8 +127,19 @@ def product_rating(request, pk):
         product.save()
         return Response(status=status.HTTP_202_ACCEPTED)
     elif request.method == "DELETE":
-        if not product_rating_:
+        if not product_rating:
             return Response(status=status.HTTP_424_FAILED_DEPENDENCY)
 
-        product_rating_.delete()
+        product_rating.delete()
+
+        product.rating = decimal.Decimal(
+            round(
+                ProductRatings.objects.filter(product=product).aggregate(Avg("rating"))[
+                    "rating__avg"
+                ],
+                2,
+            )
+        )
+        product.save()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
