@@ -1,17 +1,10 @@
 from django.urls import path
 
-from Product.views import (
-    CreateProductAPIView,
-    CreateProductRatingAPIView,
-    DeleteProductAPIView,
-    ListProductAPIView,
-    ListRatingAPIView,
-    UpdateProductAPIView,
-    api_overview,
-    get_product_with_id,
-    product_rating_view,
-    product_rating_list,
-)
+from Product.views import (CreateProductAPIView, CreateProductRatingAPIView,
+                           DeleteProductAPIView, ListProductAPIView,
+                           ListRatingAPIView, UpdateProductAPIView,
+                           api_overview, get_product_with_id,
+                           product_rating_list, product_rating_view)
 
 urlpatterns = [
     path("overview", api_overview, name="api_overview"),
