@@ -1,4 +1,3 @@
-import decimal
 import random
 from datetime import datetime
 
@@ -33,7 +32,7 @@ class Command(BaseCommand):
         Product.objects.get_or_create(
             id=1,
             name="Product #1",
-            price=decimal.Decimal(random.randrange(100, 500000)) / 100,
+            price=random.randrange(100, 500000) / 100,
             rating=0,
             updated_at=datetime.date(datetime.now()),
         )
@@ -42,7 +41,7 @@ class Command(BaseCommand):
             product = Product.objects.create(
                 id=Product.objects.latest("id").id + 1,
                 name="Product #%s" % (Product.objects.latest("id").id + 1),
-                price=decimal.Decimal(random.randrange(100, 500000)) / 100,
+                price=random.randrange(100, 500000) / 100,
                 rating=0,
                 updated_at=None,
             )
@@ -51,25 +50,24 @@ class Command(BaseCommand):
             ProductRatings.objects.create(
                 product=product,
                 user=user,
-                rating=decimal.Decimal(random.randrange(100, 500)) / 100,
+                rating=random.randrange(100, 500) / 100,
             ).save()
             ProductRatings.objects.create(
                 product=product,
                 user=user1,
-                rating=decimal.Decimal(random.randrange(100, 500)) / 100,
+                rating=random.randrange(100, 500) / 100,
             ).save()
             ProductRatings.objects.create(
                 product=product,
                 user=user2,
-                rating=decimal.Decimal(random.randrange(100, 500)) / 100,
+                rating=random.randrange(100, 500) / 100,
             ).save()
 
-            product.rating = decimal.Decimal(
-                round(
-                    ProductRatings.objects.filter(product=product).aggregate(
-                        Avg("rating")
-                    )["rating__avg"],
-                    2,
-                )
+            product.rating = round(
+                ProductRatings.objects.filter(product=product).aggregate(Avg("rating"))[
+                    "rating__avg"
+                ],
+                2,
             )
+
             product.save()

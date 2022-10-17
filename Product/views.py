@@ -1,14 +1,8 @@
-import decimal
-
 from django.db.models import Avg
 from rest_framework import filters, permissions, status
 from rest_framework.decorators import api_view
-from rest_framework.generics import (
-    CreateAPIView,
-    DestroyAPIView,
-    ListAPIView,
-    UpdateAPIView,
-)
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     ListAPIView, UpdateAPIView)
 from rest_framework.response import Response
 
 from Product.models import Product, ProductRatings
@@ -91,7 +85,7 @@ def product_rating_list(request):
 @api_view(["GET", "PUT", "DELETE"])
 def product_rating_view(request, pk):
     """
-    Retrieve, update or delete a code product_rating.
+    Retrieve, update or delete product_rating.
     """
 
     if not pk:
@@ -116,13 +110,11 @@ def product_rating_view(request, pk):
             product_rating.rating = request.data["rating"]
 
         product_rating.save()
-        product.rating = decimal.Decimal(
-            round(
-                ProductRatings.objects.filter(product=product).aggregate(Avg("rating"))[
-                    "rating__avg"
-                ],
-                2,
-            )
+        product.rating = round(
+            ProductRatings.objects.filter(product=product).aggregate(Avg("rating"))[
+                "rating__avg"
+            ],
+            2,
         )
         product.save()
         return Response(status=status.HTTP_202_ACCEPTED)
@@ -132,13 +124,11 @@ def product_rating_view(request, pk):
 
         product_rating.delete()
 
-        product.rating = decimal.Decimal(
-            round(
-                ProductRatings.objects.filter(product=product).aggregate(Avg("rating"))[
-                    "rating__avg"
-                ],
-                2,
-            )
+        product.rating = round(
+            ProductRatings.objects.filter(product=product).aggregate(Avg("rating"))[
+                "rating__avg"
+            ],
+            2,
         )
         product.save()
 
