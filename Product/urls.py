@@ -3,11 +3,10 @@ from django.urls import path
 from Product.views import (CreateProductAPIView, CreateProductRatingAPIView,
                            DeleteProductAPIView, ListProductAPIView,
                            ListRatingAPIView, UpdateProductAPIView,
-                           api_overview, get_product_with_id,
-                           product_rating_list, product_rating_view)
+                           get_product_with_id, product_rating_list,
+                           product_rating_view)
 
 urlpatterns = [
-    path("overview", api_overview, name="api_overview"),
     path("", ListProductAPIView.as_view(), name="product_list"),
     path("create/", CreateProductAPIView.as_view(), name="create_product"),
     path("update/<int:pk>/", UpdateProductAPIView.as_view(), name="update_product"),

@@ -9,25 +9,8 @@ from Product.models import Product, ProductRatings
 from Product.serializers import ProductRatingSerializer, ProductSerializer
 
 
-@api_view(["GET"])
-def api_overview(request):
-    api_urls = {
-        "overview/": "API overview",
-        "": "Product list",
-        "create/": "Create product",
-        "update/<int:pk>/": "Update product",
-        "delete/<int:pk>/": "Delete product",
-        "<int:pk>/": "Get product with id",
-        "rate/": "Rating list",
-        "rate/create": "Create rating",
-        "rate/<int:pk>/": "All rating",
-        "rate/list/": "Ratings list",
-    }
-    return Response(api_urls)
-
-
 class ListProductAPIView(ListAPIView):
-    """This endpoint list all the available products from the database"""
+    """This endpoint lists all the available products from the database"""
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -51,14 +34,14 @@ class UpdateProductAPIView(UpdateAPIView):
 
 
 class DeleteProductAPIView(DestroyAPIView):
-    """This endpoint allows for deletion of a specific Product from the database"""
+    """This endpoint allows for deletion of a specific product from the database"""
 
     serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
 class ListRatingAPIView(ListAPIView):
-    """This endpoint list all the available products from the database"""
+    """This endpoint lists ratings for all the available products from the database"""
 
     queryset = ProductRatings.objects.all()
     serializer_class = ProductRatingSerializer
@@ -67,18 +50,25 @@ class ListRatingAPIView(ListAPIView):
 
 
 class CreateProductRatingAPIView(CreateAPIView):
+    """This endpoint is used for rating a product"""
     serializer_class = ProductRatingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
 @api_view(["GET"])
 def get_product_with_id(request, pk):
+    """
+    This endpoint retrieves a specific product by id.
+    """
     serializer = ProductSerializer(Product.objects.get(id=pk), many=False)
     return Response(serializer.data)
 
 
 @api_view(["GET"])
 def product_rating_list(request):
+    """
+    This endpoint lists saved ratings for all products from the database.
+    """
     serializer = ProductRatingSerializer(ProductRatings.objects.all(), many=True)
     return Response(serializer.data)
 
@@ -86,7 +76,7 @@ def product_rating_list(request):
 @api_view(["GET", "PUT", "DELETE"])
 def product_rating_view(request, pk):
     """
-    Retrieve, update or delete product_rating.
+    Retrieve, update or delete product_rating depending on the method.
     """
 
     if not pk:
